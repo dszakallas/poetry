@@ -58,7 +58,10 @@ class Publisher:
 
         if not (username and password):
             # Check if we have a token first
-            token = self._authenticator.get_pypi_token(repository_name)
+            token = None
+            if not (username or password):
+                token = self._authenticator.get_pypi_token(repository_name)
+
             if token:
                 logger.debug(f"Found an API token for {repository_name}.")
                 username = "__token__"
@@ -69,8 +72,8 @@ class Publisher:
                     logger.debug(
                         f"Found authentication information for {repository_name}."
                     )
-                    username = auth.username
-                    password = auth.password
+                    username = auth.username or username
+                    password = auth.password or password
 
         resolved_client_cert = client_cert or get_client_cert(
             self._poetry.config, repository_name
