@@ -72,8 +72,8 @@ class Publisher:
                     logger.debug(
                         f"Found authentication information for {repository_name}."
                     )
-                    username = auth.username or username
-                    password = auth.password or password
+                    username = username or auth.username
+                    password = password or auth.password
 
         resolved_client_cert = client_cert or get_client_cert(
             self._poetry.config, repository_name
